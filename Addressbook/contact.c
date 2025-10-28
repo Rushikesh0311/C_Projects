@@ -8,8 +8,8 @@
 #include "populate.h"
 
 int for_edit = 0; // as a flag for edit function 
-int foundContacts[100]; // stores the found indexes of contacts with same name
-int matched_contact = 0; // count of founded contacts
+//int foundContacts[100]; // stores the found indexes of contacts with same name
+//int matched_contact = 0; // count of founded contacts
 
 void listContacts(struct AddressBook *addressBook) // prints all contacts 
 {
@@ -42,8 +42,8 @@ void initialize(struct AddressBook *addressBook) {
     addressBook->contactCount = 0;
     populateAddressBook(addressBook);
 
-    // Load contacts from file during initialization (After files)
-    //loadContactsFromFile(addressBook);
+    // Load contacts from file during initialization 
+    loadContactsFromFile(addressBook);
 }
 
 void saveAndExit(struct AddressBook *addressBook) {
@@ -76,7 +76,7 @@ void createContact(struct AddressBook *addressBook)
             printf("\nEnter correct number!!!\n");
             printf("\n");
         }else
-        if(!duplicate_phone(addressBook,mob))
+        if(!duplicate_phone(addressBook,mob)) // duplicate No checks here
         {
             printf("\n");
             printf("The Number is Already present!!\n");
@@ -157,7 +157,7 @@ void searchContact(struct AddressBook *addressbook)
 
 void editContact(struct AddressBook *addressBook)
 {
-    int editopt;
+    int editopt; // option variable for switch case
     int index; // index or Serial No of specific contact we want to edit 
     searchContact(addressBook);
    
@@ -210,9 +210,9 @@ void deleteContact(struct AddressBook *addressBook)
 {
     int size = addressBook->contactCount;
     
-    searchContact(addressBook);
+    searchContact(addressBook); // search fun call here sreach -->>delete
     
-    if(for_edit == 1)
+    if(for_edit == 1) // global flag
     {
         printf("\nNo contact found to delete!!\n");
         return;
@@ -226,13 +226,13 @@ void deleteContact(struct AddressBook *addressBook)
 
     //int idx = foundContacts[serial_no - 1]; //new index with same names starts with 1
 
-    if(serial_no < 0 || serial_no > size)
+    if(serial_no < 0 || serial_no > size) // checks the correct index that user entered
     {
         printf("\nInvalid Index!!\nSelct correct Index!!\n");
         return;
     }
 
-    for(int i=serial_no;i<size-1;i++)
+    for(int i=serial_no;i<size-1;i++) // shifts the contacts after deleted specific contact
     {
         strcpy(addressBook->contacts[i].name,addressBook->contacts[i+1].name);
         strcpy(addressBook->contacts[i].phone,addressBook->contacts[i+1].phone);
@@ -260,14 +260,14 @@ void deleteContact(struct AddressBook *addressBook)
 
 int phnNo_validation(char* phone)
 {
-    int len = strlen(phone);
+    int len = strlen(phone); // Phn Nos length
 
     if(len != 10)
         return 0;
     
     for(int i=0;i<len;i++)
     {
-        if(phone[i] < 48 || phone[i] > 57)
+        if(phone[i] < 48 || phone[i] > 57) // checks here that No '0' -> '9'
         {
             return 0;
         }
@@ -280,7 +280,7 @@ int duplicate_phone(struct AddressBook* addressbook,char* mob)
     int size = addressbook->contactCount;
     for(int i=0;i<size;i++)
     {
-        if(!strcmp(addressbook->contacts[i].phone,mob))
+        if(!strcmp(addressbook->contacts[i].phone,mob)) // compares with every number
         {
             return 0;
         }
@@ -299,13 +299,13 @@ int email_validation(char* mail)
     
     for(int i=0;i<len;i++)
     {
-        if(isupper(mail[i]) && !(mail[i] >= 48 && mail[i] <= 57))
+        if(isupper(mail[i]) && !(mail[i] >= 48 && mail[i] <= 57)) // checks is uppercase is there
         {
             return 0;
         }
     }
 
-    char *ch = strchr(mail,'@'); // strchr finds first position 
+    char *ch = strchr(mail,'@'); // strchr finds first position of str
     char *ch2 = strchr(mail,'.');
 
     for(int i=0;i<len;i++)
@@ -314,7 +314,7 @@ int email_validation(char* mail)
         {                                                     // # 3rd condition here checks no directly dot ( . ) appears after @.
             return 0;
         }
-        else if(ch2 != mail+len-4) // Ensures mail end with .com
+        else if(ch2 != mail+len-4) // Ensures mail ends with the .com
         {
             return 0;
         }
@@ -392,7 +392,7 @@ void search_with_phone(struct AddressBook* addressbook)
 {
     int size = addressbook->contactCount;
 
-    char phn[20];
+    char phn[20]; // extra input for PhnNo to compare
 
     printf("\n");
     printf("Enter Number to search: ");
@@ -514,10 +514,10 @@ void Edit_Name(struct AddressBook* addressBook)
         printf("\nEnsure Serial-No of contact(Sr.No): ");
         scanf("%d",&serial_no);
 
-       // int idx = foundContacts[serial_no-1]; // serial numbers starts from 1     
-         // Index stars with 0 here 
+       // int idx = foundContacts[serial_no-1]; // serial numbers starts from 1  
+       
         
-        strcpy(addressBook->contacts[serial_no-1].name,new_name);  // thats why index -1
+        strcpy(addressBook->contacts[serial_no-1].name,new_name);  // Index stars with 0 here thats why index -1
      
         printf("\nContact Modified Successfully !!\n");
     }
