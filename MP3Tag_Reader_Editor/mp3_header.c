@@ -126,8 +126,8 @@ int validate_inputs(int argc,char *argv[])
     if (!strcmp(argv[1], "-e")) 
     {
        
-        int len = strlen(argv[3]);
-        if(len < 4 || strcmp(argv[3] + (len - 4), ".mp3") != 0)
+        int len = strlen(argv[4]);
+        if(len < 4 || strcmp(argv[4] + (len - 4), ".mp3") != 0)
         {
             printf("-----------------------------------\n");
             printf("Invalid File Format (expected .mp3)\n");

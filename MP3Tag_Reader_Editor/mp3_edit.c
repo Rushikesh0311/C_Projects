@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h> 
+#include <stdint.h>
+
 
 //mp3_tags tags;
 
@@ -148,18 +150,39 @@ void edit_tag(FILE* fp, FILE* temp, char* tag_options,char* new_value)
             break;
         }
 
+        // if (!strcmp(tag_name, tag_options) && new_value != NULL)
+        // {
+        //     // Write frame name
+        //     fwrite(tag_name, 1, 4, temp);
+
+        //     // New size and conversion
+        //     int new_size = strlen(new_value);  //new title size and convert endian
+        //     LittleToBigEndianInPlace(&new_size);
+
+        //     fwrite(&new_size, 4, 1, temp); // write new size in big-endian
+        //     fwrite(flags, 1, 2, temp);     // write original flags
+        //     fwrite(new_value, 1, strlen(new_value), temp); // write new title
+        // }
         if (!strcmp(tag_name, tag_options) && new_value != NULL)
         {
-            // Write frame name
             fwrite(tag_name, 1, 4, temp);
 
-            // New size and conversion
-            int new_size = strlen(new_value);  //new title size and convert endian
-            LittleToBigEndianInPlace(&new_size);
+            // Add +1 for the text encoding byte
+            // int new_size = strlen(new_value) + 1;
+            // LittleToBigEndianInPlace(&new_size);
 
-            fwrite(&new_size, 4, 1, temp); // write new size in big-endian
-            fwrite(flags, 1, 2, temp);     // write original flags
-            fwrite(new_value, 1, strlen(new_value), temp); // write new title
+            // fwrite(&new_size, 4, 1, temp);
+
+            int new_size = strlen(new_value) + 1;
+            int be_size = new_size;                // keep host-order value intact
+            LittleToBigEndianInPlace(&be_size);    // convert copy to big-endian
+            fwrite(&be_size, 4, 1, temp);
+
+            fwrite(flags, 1, 2, temp);
+
+            unsigned char enc = 0x00; //1-byte encoding flag before the string data
+            fwrite(&enc, 1, 1, temp);  // write encoding byte
+            fwrite(new_value, 1, strlen(new_value), temp); // then the string
         }
         else
         {
@@ -179,6 +202,8 @@ void edit_tag(FILE* fp, FILE* temp, char* tag_options,char* new_value)
     while (fread(&ch, 1, 1, fp) > 0)
         fwrite(&ch, 1, 1, temp);
 }
+
+
 
 
 

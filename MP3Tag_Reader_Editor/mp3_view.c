@@ -174,19 +174,19 @@ void read_mp3_year(char* data)
     // strcpy(tags.year,year);
     // printf("Year: %s\n",tags.year);
 
-    strcpy(tags.year, data);
+    strcpy(tags.year, data+1);
    printf("%-15s : %s\n", "Year", tags.year);
 }
 
 void read_mp3_content_type(char* data)
 {
-    strcpy(tags.content_type,data);
+    strcpy(tags.content_type,data+1);
     printf("%-15s : %s\n", "Content type", tags.content_type);
 }
 
 void read_mp3_composor(char* data)
 {
-    strcpy(tags.compose,data);
+    strcpy(tags.compose,data+1);
     printf("%-15s : %s\n", "Composor", tags.compose);
 
 }

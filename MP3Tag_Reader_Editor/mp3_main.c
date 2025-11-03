@@ -8,7 +8,7 @@
                              MP3 Tag Editor Project
 ================================================================================
 Name : Rushikesh Rajendra Gore
-Date : 25-10-2025
+Date : 28-10-2025
 Batch Id: 25021E - 22
 Student_ID: 25022_008
 language : C programming
@@ -69,6 +69,7 @@ int main(int argc,char* argv[])
             printf("\n-----------------------------------------------------\n");
             printf("            MP3 Tag Reader and Editor");
             printf("\n-----------------------------------------------------\n");
+            //printf("Updated Details: \n");
             edit_mp3(argv); // call for edit mp3 --> only id args are valid
             printf("\n-----------------------------------------------------\n");
             printf("Tag Edited Successfully\n");
