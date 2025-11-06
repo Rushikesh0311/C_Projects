@@ -19,7 +19,7 @@ struct PasswordManager {
     int credentialCount;
 };
 
-void XOR_cipher(char* text,char key); // encrypt--> Decrypt
+//void XOR_cipher(char* text,char key); // encrypt--> Decrypt
 
 
 void initialize(struct PasswordManager *manager);
@@ -32,6 +32,13 @@ void create_metaFile(const char *meta_file); // for storing master pass
 int verify_master_pass(const char* meta_file,int max_attempts);
 void strip_newline(char *s);
 
+void xor_encrypt_decrypt(char text[], char key);
+int hex_char_value(char c);
+void text_to_hex(char text[], char hex_out[]);
+int hex_to_text(const char hex[], char text_out[], size_t out_max);
+int reset_master_pass(const char *meta_file, int max_attempts);
+
+
 void saveCredentialsToFile(struct PasswordManager *manager);
 void loadCredentialsFromFile(struct PasswordManager *manager);
 
@@ -39,5 +46,8 @@ void loadCredentialsFromFile(struct PasswordManager *manager);
 
 
 //void create_metaFile(const char* meta_file);
+
+
+
 
 #endif

@@ -77,6 +77,7 @@ int main() {
             printf("3. Search Credential\n");
             printf("4. Delete Credential\n");
             printf("5. Save Credentials & Exit\n");
+            printf("6. Reset master PassWord\n");
             printf("---------------------------------\n");
             printf("Enter your choice (1-4): ");
             scanf("%d", &opt);
@@ -99,13 +100,84 @@ int main() {
                 case 4:
                     delete_credential(&manager);
                     printf("\nCredential Deleted!\n");
-                    break;    
+                    break;  
+                case 6:
+                    if (reset_master_pass(META_FILE, 3) == 1) 
+                    {
+                        printf("Master password reset OK.\n");
+                    } 
+                    else 
+                    {
+                        printf("Master password NOT changed or cancelled.\n");
+                    }
+                    break;;      
                 default:
                     printf("Invalid option.\n");
             }
-        } while (opt != 4);
+        } while (opt != 6);
     }
 
     return 0;
 
 }
+
+
+
+
+
+
+
+/*
+
+🔹 Step 1: Original Password
+Example: "1234"
+
+🔹 Step 2: XOR each character with the key:
+| Character | ASCII | Binary       | XOR with 75 | Result (Decimal) | Result (Char) |
+|------------|--------|--------------|--------------|------------------|----------------|
+| '1'        | 49     | 00110001     | 01001011     | 122              | 'z'            |
+| '2'        | 50     | 00110010     | 01001011     | 121              | 'y'            |
+| '3'        | 51     | 00110011     | 01001011     | 120              | 'x'            |
+| '4'        | 52     | 00110100     | 01001011     | 127              | (DEL char)     |
+
+So after XOR:
+Encrypted (binary form): z y x (DEL)
+
+The last character is unreadable — that’s why we need hex encoding next.
+
+🔹 Step 3: Convert XOR result to Hex
+Each byte → two hex digits
+
+| Char | ASCII (Decimal) | Hex |
+|------|------------------|------|
+| z    | 122              | 7A   |
+| y    | 121              | 79   |
+| x    | 120              | 78   |
+| DEL  | 127              | 7F   |
+
+So after encoding:
+Final Encrypted (hex) = 7A79787F
+
+✅ This is what gets saved to your credential.csv file.
+
+🔹 Step 4: Decryption (reverse process)
+When you read from the file:
+You have "7A79787F".
+Convert each two hex chars → one byte → get [122,121,120,127].
+XOR each again with 'K' (75):
+122 ^ 75 = 49 → '1'
+121 ^ 75 = 50 → '2'
+120 ^ 75 = 51 → '3'
+127 ^ 75 = 52 → '4'
+
+✅ You get back "1234" exactly!
+
+🔹 In short:
+| Stage               | Example      |
+|---------------------|--------------|
+| Original Password   | 1234         |
+| After XOR           | z y x (DEL)  |
+| After Hex Encode    | 7A79787F     |
+| Stored in File      | 7A79787F     |
+| After Decode + XOR  | 1234 ✅       |
+*/
