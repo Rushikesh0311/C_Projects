@@ -2,6 +2,7 @@
 #define ENCODE_H
 
 #include "types.h" // Contains user defined types
+#include "common.h"
 
 /* 
  * Structure to store information required for
@@ -10,29 +11,31 @@
  * also stored
  */
 
-#define MAX_SECRET_BUF_SIZE 1
-#define MAX_IMAGE_BUF_SIZE (MAX_SECRET_BUF_SIZE * 8)
-#define MAX_FILE_SUFFIX 4
+// #define MAX_SECRET_BUF_SIZE 1
+// #define MAX_IMAGE_BUF_SIZE (MAX_SECRET_BUF_SIZE * 8)
+// #define MAX_FILE_SUFFIX 4
 
 typedef struct _EncodeInfo
 {
     /* Source Image info */
-    char *src_image_fname;
-    FILE *fptr_src_image;
-    uint image_capacity;
-    uint bits_per_pixel;
-    char image_data[MAX_IMAGE_BUF_SIZE];
+    char *src_image_fname;      // store src_image_fname
+    FILE *fptr_src_image;       //file pointer for src_image
+    uint image_capacity;        // store the src_img_filesize
+
+    //uint bits_per_pixel;
+    //char image_data[MAX_IMAGE_BUF_SIZE];
 
     /* Secret File Info */
-    char *secret_fname;
-    FILE *fptr_secret;
-    char extn_secret_file[MAX_FILE_SUFFIX];
-    char secret_data[MAX_SECRET_BUF_SIZE];
-    long size_secret_file;
+    char *secret_fname;         //sotre the serect_fname
+    FILE *fptr_secret;          //file pointer for secret_file
+    char extn_secret_file[4];
+
+   // char secret_data[MAX_SECRET_BUF_SIZE];
+   // long size_secret_file;
 
     /* Stego Image Info */
-    char *stego_image_fname;
-    FILE *fptr_stego_image;
+    char *stego_image_fname;    // store output img fname
+    FILE *fptr_stego_image;     // file pointer for output_img
 
 } EncodeInfo;
 
@@ -40,10 +43,10 @@ typedef struct _EncodeInfo
 /* Encoding function prototype */
 
 /* Check operation type */
-OperationType check_operation_type(char *argv[]);
+OperationType check_operation_type(char *argv[]); // validations
 
 /* Read and validate Encode args from argv */
-Status read_and_validate_encode_args(char *argv[], EncodeInfo *encInfo);
+Status read_and_validate_encode_args(int argc,char *argv[], EncodeInfo *encInfo); // CLA validations
 
 /* Perform the encoding */
 Status do_encoding(EncodeInfo *encInfo);
@@ -71,6 +74,9 @@ Status encode_secret_file_extn(const char *file_extn, EncodeInfo *encInfo);
 
 /* Encode secret file size */
 Status encode_secret_file_size(long file_size, EncodeInfo *encInfo);
+
+Status encode_secret_file_extn_size(int size,EncodeInfo *encInfo);
+void encode_int_to_lsb(int val,unsigned char buffer[]);
 
 /* Encode secret file data*/
 Status encode_secret_file_data(EncodeInfo *encInfo);

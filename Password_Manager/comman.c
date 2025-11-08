@@ -251,7 +251,8 @@ void list_credentials(struct PasswordManager *m)
     printf("---------------------------------------------------------------\n");
 
     char bin[512]; // temp for decoded bytes
-    for (int i = 0; i < m->credentialCount; ++i) {
+    for (int i = 0; i < m->credentialCount; ++i) 
+    {
         if (hex_to_text(m->credentials[i].password, bin, sizeof(bin)) < 0) {
             strncpy(bin, "[err]", sizeof(bin)-1);
             bin[sizeof(bin)-1] = '\0';

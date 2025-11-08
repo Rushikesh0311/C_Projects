@@ -13,9 +13,9 @@ typedef enum
 
 typedef enum
 {
-    e_encode,
-    e_decode,
-    e_unsupported
+    e_encode, // for opt -e argv 
+    e_decode, // -d
+    e_unsupported // noting two of them
 } OperationType;
 
 #endif
