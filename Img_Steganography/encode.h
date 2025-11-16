@@ -3,6 +3,7 @@
 
 #include "types.h" // Contains user defined types
 #include "common.h"
+#define MAX_EXTN_LEN 16
 
 /* 
  * Structure to store information required for
@@ -28,7 +29,7 @@ typedef struct _EncodeInfo
     /* Secret File Info */
     char *secret_fname;         //sotre the serect_fname
     FILE *fptr_secret;          //file pointer for secret_file
-    char extn_secret_file[4];
+    char extn_secret_file[MAX_EXTN_LEN];  // --> MACRO
 
    // char secret_data[MAX_SECRET_BUF_SIZE];
    // long size_secret_file;
